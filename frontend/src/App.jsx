@@ -6,6 +6,11 @@ import About from "./pages/About";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import Navbar from "./components/Navbar";
+import Dashboard from "./pages/Dashboard";
+import Profile from "./pages/Profile";
+import YourBlog from "./pages/YourBlog";
+import Comments from "./pages/Comments";
+import WriteBlog from "./pages/WriteBlog";
 
 const router = createBrowserRouter([
   {
@@ -52,6 +57,33 @@ const router = createBrowserRouter([
         <SignUp />,
       </>
     ),
+  },
+  {
+    path: "/dashboard",
+    element: (
+      <>
+        <Navbar />
+        <Dashboard />,
+      </>
+    ),
+    children: [
+      {
+        path: "profile",
+        element: <Profile />,
+      },
+      {
+        path: "your-blog",
+        element: <YourBlog />,
+      },
+      {
+        path: "comments",
+        element: <Comments />,
+      },
+      {
+        path: "write-blog",
+        element: <WriteBlog />,
+      },
+    ],
   },
 ]);
 

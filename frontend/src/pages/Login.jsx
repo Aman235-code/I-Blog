@@ -8,11 +8,14 @@ import {
 } from "../components/ui/card";
 import { Label } from "../components/ui/label";
 import { Input } from "../components/ui/input";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "sonner";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "../redux/authSlice.js";
+import { setLoading } from "../redux/authSlice";
 
 const Login = () => {
   const [showPass, setShowPass] = useState(false);
@@ -21,6 +24,8 @@ const Login = () => {
     password: "",
   });
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { loading } = useSelector((store) => store.auth);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -33,6 +38,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      dispatch(setLoading(true));
       const res = await axios.post(
         `http://localhost:8000/api/v1/user/login`,
         input,
@@ -46,11 +52,14 @@ const Login = () => {
 
       if (res.data.success) {
         navigate("/");
+        dispatch(setUser(res.data.user));
         toast.success(res.data.message);
       }
     } catch (error) {
       console.log(error);
       toast.error(error.message);
+    } finally {
+      dispatch(setLoading(false));
     }
   };
 
@@ -109,7 +118,14 @@ const Login = () => {
                 </button>
               </div>
               <Button type="submit" className={"w-full"}>
-                Login
+                {loading ? (
+                  <>
+                    <Loader2 className="mr-2 w-4 h-4 animate-spin" />
+                    Please Wait
+                  </>
+                ) : (
+                  "Login"
+                )}
               </Button>
               <p className="text-center text=gray-600 dark:text-gray-300">
                 Don't have an account?{" "}

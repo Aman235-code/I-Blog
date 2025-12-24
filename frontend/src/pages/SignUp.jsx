@@ -8,11 +8,13 @@ import {
 } from "../components/ui/card";
 import { Label } from "../components/ui/label";
 import { Input } from "../components/ui/input";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { setLoading } from "../redux/authSlice";
 
 const SignUp = () => {
   const [showPass, setShowPass] = useState(false);
@@ -23,6 +25,8 @@ const SignUp = () => {
     password: "",
   });
   const navigate = useNavigate();
+  const { loading } = useSelector((store) => store.auth);
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -35,6 +39,7 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      dispatch(setLoading(true));
       const res = await axios.post(
         `http://localhost:8000/api/v1/user/register`,
         user,
@@ -53,6 +58,8 @@ const SignUp = () => {
     } catch (error) {
       console.log(error);
       toast.error(error.message);
+    } finally {
+      dispatch(setLoading(false));
     }
   };
   return (
@@ -136,7 +143,14 @@ const SignUp = () => {
                 </button>
               </div>
               <Button type="submit" className={"w-full"}>
-                Sign Up
+                {loading ? (
+                  <>
+                    <Loader2 className="mr-2 w-4 h-4 animate-spin" />
+                    Please Wait
+                  </>
+                ) : (
+                  "Sign Up"
+                )}
               </Button>
               <p className="text-center text=gray-600 dark:text-gray-300">
                 Already have an account?{" "}
