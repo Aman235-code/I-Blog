@@ -24,8 +24,7 @@ import {
 import { LiaCommentSolid } from "react-icons/lia";
 
 const Navbar = () => {
-  // const { user } = useSelector((store) => store.auth);
-  const user = true;
+  const { user } = useSelector((store) => store.auth);
   const { theme } = useSelector((store) => store.theme);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -103,30 +102,38 @@ const Navbar = () => {
                   <DropdownMenuContent className="w-56" align="start">
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
                     <DropdownMenuGroup>
-                      <DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => navigate("/dashboard/profile")}
+                      >
                         <User />
                         Profile
                         <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
                       </DropdownMenuItem>
-                      <DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => navigate("/dashboard/your-blog")}
+                      >
                         <ChartColumnBig />
                         Your Blogs
                         <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
                       </DropdownMenuItem>
-                      <DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => navigate("/dashboard/comments")}
+                      >
                         <LiaCommentSolid />
                         Comments
                         <DropdownMenuShortcut>⌘K</DropdownMenuShortcut>
                       </DropdownMenuItem>
-                      <DropdownMenuItem>
-                        <FaRegEdit/>
+                      <DropdownMenuItem
+                        onClick={() => navigate("/dashboard/write-blog")}
+                      >
+                        <FaRegEdit />
                         Write Blog
                         <DropdownMenuShortcut>⌘W</DropdownMenuShortcut>
                       </DropdownMenuItem>
                     </DropdownMenuGroup>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem>
-                      <LogOut/>
+                      <LogOut />
                       Log out
                       <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
                     </DropdownMenuItem>
