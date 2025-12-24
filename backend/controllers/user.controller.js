@@ -1,6 +1,8 @@
 import jwt from "jsonwebtoken";
 import { User } from "../models/user.model.js";
 import bcrypt from "bcryptjs";
+import getDataUri from "../utils/dataUri.js";
+import cloudinary from "../utils/cloudinary.js";
 
 export const register = async (req, res) => {
   try {
@@ -112,6 +114,57 @@ export const logout = async (_, res) => {
     return res.status(200).cookie("token", "", { maxAge: 0 }).json({
       success: true,
       message: "Logged out successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const updateProfile = async (req, res) => {
+  try {
+    const userId = req.id;
+    const {
+      firstName,
+      lastName,
+      bio,
+      occupation,
+      instagram,
+      facebook,
+      linkedIn,
+      github,
+    } = req.body;
+
+    const file = req.file;
+    const fileUri = getDataUri(file);
+    const cloudResponse = await cloudinary.uploader.upload(fileUri);
+    const user = await User.findById(userId).select("-password");
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    if (firstName) user.firstName = firstName;
+    if (lastName) user.lastName = lastName;
+    if (occupation) user.occupation = occupation;
+    if (bio) user.bio = bio;
+    if (instagram) user.instagram = instagram;
+    if (facebook) user.facebook = facebook;
+    if (linkedIn) user.linkedIn = linkedIn;
+    if (github) user.github = github;
+
+    if (file) user.photoUrl = cloudResponse.secure_url;
+
+    await user.save();
+    return res.status(200).json({
+      success: true,
+      message: "Profile Updated Successfully",
+      user,
     });
   } catch (error) {
     console.log(error);
