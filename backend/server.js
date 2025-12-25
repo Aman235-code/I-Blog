@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import connectDb from "./database/db.js";
 import userRoute from "./routes/user.route.js";
+import blogRoute from "./routes/blog.route.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
@@ -23,6 +24,7 @@ app.use(cookieParser());
 app.use(express.json());
 
 app.use("/api/v1/user", userRoute);
+app.use("/api/v1/blog", blogRoute);
 
 app.listen(PORT, () => {
   connectDb();
