@@ -121,3 +121,8 @@
     @apply bg-background text-foreground;
   }
 }
+
+
+.jodit_toolbar {
+  color: rgba(26,25,25,0.806)
+}
