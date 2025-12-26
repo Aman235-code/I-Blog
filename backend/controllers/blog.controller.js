@@ -147,3 +147,153 @@ export const deleteBlog = async (req, res) => {
     });
   }
 };
+
+export const getPublishedBlog = async (req, res) => {
+  try {
+    const blogs = await Blog.find({ isPublished: true })
+      .sort({ createdAt: -1 })
+      .populate({
+        path: "author",
+        select: "firstName lastName photoUrl",
+      });
+
+    if (!blogs) {
+      return res.status(401).json({
+        success: false,
+        message: "Blog not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      blogs,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to get published Blogs",
+      error: error.message,
+    });
+  }
+};
+
+export const togglePublishBlog = async (req, res) => {
+  try {
+    const { blogId } = req.params;
+    const { publish } = req.query;
+
+    const blog = await Blog.findById(blogId);
+    if (!blog) {
+      return res.status(404).json({
+        success: false,
+        message: "Blog not found",
+      });
+    }
+
+    blog.isPublished = !publish;
+    await blog.save();
+
+    const statusMessage = blog.isPublished ? "Published" : "Unpublished";
+
+    return res.status(200).json({
+      success: true,
+      message: `Blog is ${statusMessage}`,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to update status",
+      error: error.message,
+    });
+  }
+};
+
+export const likeBlog = async (req, res) => {
+  try {
+    const { blogId } = req.params;
+    const likeId = req.id;
+    const blog = await Blog.findById(blogId).populate({
+      path: "likes",
+    });
+
+    if (!blog) {
+      return res.status(404).json({
+        success: false,
+        message: "Blog not found",
+      });
+    }
+
+    await blog.updateOne({ $addToSet: { likes: likeId } });
+    await blog.save();
+
+    return res.status(200).json({
+      success: true,
+      message: `Blog Liked`,
+      blog,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to Like Blog",
+      error: error.message,
+    });
+  }
+};
+
+export const dislikeBlog = async (req, res) => {
+  try {
+    const { blogId } = req.params;
+    const likeId = req.id;
+    const blog = await Blog.findById(blogId);
+
+    if (!blog) {
+      return res.status(404).json({
+        success: false,
+        message: "Blog not found",
+      });
+    }
+
+    await blog.updateOne({ $pull: { likes: likeId } });
+    await blog.save();
+
+    return res.status(200).json({
+      success: true,
+      message: `Blog Disliked`,
+      blog,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to dislike blog",
+      error: error.message,
+    });
+  }
+};
+
+export const getMyTotalBlogLikes = async (req, res) => {
+  try {
+    const userId = req.id;
+    const myBlogs = await Blog.find({ author: userId }).select("likes");
+    const totalLikes = myBlogs.reduce(
+      (acc, blog) => acc + (blog.likes?.length || 0),
+      0
+    );
+
+    return res.status(200).json({
+      success: true,
+      totalBlogs: myBlogs.length,
+      totalLikes: totalLikes,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch total blog likes",
+      error: error.message,
+    });
+  }
+};
