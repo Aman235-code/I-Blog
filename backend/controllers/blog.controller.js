@@ -116,7 +116,6 @@ export const getBlogs = async (req, res) => {
 export const deleteBlog = async (req, res) => {
   try {
     const blogId = req.params.id;
-    console.log(blogId);
     const authorId = req.id;
     const blog = await Blog.findById(blogId);
     if (!blog) {
@@ -181,6 +180,7 @@ export const getPublishedBlog = async (req, res) => {
 export const togglePublishBlog = async (req, res) => {
   try {
     const { blogId } = req.params;
+
     const { publish } = req.query;
 
     const blog = await Blog.findById(blogId);

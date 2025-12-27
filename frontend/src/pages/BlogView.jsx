@@ -1,5 +1,5 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import {
   Breadcrumb,
@@ -12,15 +12,23 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
 import { Badge } from "../components/ui/badge";
 import { Button } from "../components/ui/button";
-import { FaRegHeart } from "react-icons/fa";
-import { Bookmark, MessageSquare, Share2 } from "lucide-react";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { Bookmark, MessageSquare, Share2, User } from "lucide-react";
 import { toast } from "sonner";
+import axios from "axios";
+import { setBlog } from "../redux/blogSlice";
 
 const BlogView = () => {
   const params = useParams();
+  const dispatch = useDispatch();
   const blogId = params.blogId;
   const { blog } = useSelector((store) => store.blog);
+  const { user } = useSelector((store) => store.auth);
   const selectedBlog = blog.find((blog) => blog._id === blogId);
+  const [blogLike, setBlogLike] = useState(selectedBlog.likes.length || 0);
+  const [liked, setLiked] = useState(
+    selectedBlog.likes.includes(user._id) || false
+  );
 
   const changeTime = (isDate) => {
     const date = new Date(isDate);
@@ -44,6 +52,38 @@ const BlogView = () => {
       navigator.clipboard
         .writeText(blogUrl)
         .then(() => toast.success("Blog link copied to clipboard"));
+    }
+  };
+
+  const likeDislikeHandler = async () => {
+    try {
+      const action = liked ? "dislike" : "like";
+      const res = await axios.get(
+        `http://localhost:8000/api/v1/blog/${selectedBlog._id}/${action}`,
+        { withCredentials: true }
+      );
+
+      if (res.data.success) {
+        const updatedLikes = liked ? blogLike - 1 : blogLike + 1;
+        setBlogLike(updatedLikes);
+        setLiked(!liked);
+      }
+      const updatedBlogData = blog.map((p) =>
+        p._id === selectedBlog._id
+          ? {
+              ...p,
+              likes: liked
+                ? p.likes.filter((id) => id !== user._id)
+                : [...p.likes, user._id],
+            }
+          : p
+      );
+
+      toast.success(res.data.message);
+      dispatch(setBlog(updatedBlogData));
+    } catch (error) {
+      console.log(error.message);
+      toast.error(error.message);
     }
   };
 
@@ -124,12 +164,21 @@ const BlogView = () => {
 
           <div className="flex items-center justify-between border-y dark:border-gray-800 border-gray-300 py-4 mb-8">
             <div className="flex items-center space-x-4">
-              <Button variant="ghost" className={"flex items-center gap-1"}>
-                <FaRegHeart
-                  size={24}
-                  className="cursor-pointer hover:text-gray-600 text-white"
-                />
-                <span>0</span>
+              <Button
+                onClick={likeDislikeHandler}
+                variant="ghost"
+                className={"flex items-center gap-1"}
+              >
+                {liked ? (
+                  <FaHeart size={24} className="cursor-pointer text-red-600" />
+                ) : (
+                  <FaRegHeart
+                    size={24}
+                    className="cursor-pointer hover:text-gray-600 text-white"
+                  />
+                )}
+
+                <span>{blogLike}</span>
               </Button>
 
               <Button variant="ghost">

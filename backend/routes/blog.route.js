@@ -20,13 +20,14 @@ router.put("/update/:id", isAuthenticated, singleUpload, updateBlog);
 router.get("/blogs", isAuthenticated, getBlogs);
 router.delete("/delete/:id", isAuthenticated, deleteBlog);
 
-router.post("/:blogId/like", isAuthenticated, likeBlog);
-router.post("/:blogId/dislike", isAuthenticated, dislikeBlog);
+router.get("/:blogId/like", isAuthenticated, likeBlog);
+
+router.get("/:blogId/dislike", isAuthenticated, dislikeBlog);
 
 router.get("/my-blogs/likes", isAuthenticated, getMyTotalBlogLikes);
 
 router.get("/get-published-blogs", isAuthenticated, getPublishedBlog);
 
-router.patch("/:blogId", isAuthenticated, togglePublishBlog);
+router.patch("/:blogId", togglePublishBlog);
 
 export default router;
