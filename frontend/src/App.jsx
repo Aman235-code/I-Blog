@@ -13,6 +13,7 @@ import Comments from "./pages/Comments";
 import WriteBlog from "./pages/WriteBlog";
 import UpdateBlog from "./pages/UpdateBlog";
 import BlogView from "./pages/BlogView";
+import Footer from "./components/Footer";
 
 const router = createBrowserRouter([
   {
@@ -21,6 +22,7 @@ const router = createBrowserRouter([
       <>
         <Navbar />
         <Home />
+        <Footer />
       </>
     ),
   },
@@ -30,6 +32,7 @@ const router = createBrowserRouter([
       <>
         <Navbar />
         <Blogs />,
+        <Footer />
       </>
     ),
   },
@@ -39,6 +42,7 @@ const router = createBrowserRouter([
       <>
         <Navbar />
         <About />,
+        <Footer />
       </>
     ),
   },
