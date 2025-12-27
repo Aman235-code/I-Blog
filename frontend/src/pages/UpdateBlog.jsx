@@ -88,7 +88,6 @@ const UpdateBlog = () => {
       );
       if (res.data.success) {
         toast.success(res.data.message);
-        console.log(blogData);
       }
     } catch (error) {
       console.log(error.message);
@@ -99,7 +98,7 @@ const UpdateBlog = () => {
   };
 
   const togglePublish = async (action) => {
-    console.log(action);
+
     try {
       const res = await axios.patch(`http://localhost:8000/api/v1/blog/${id}`, {
         params: { action },
