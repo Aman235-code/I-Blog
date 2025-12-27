@@ -19,6 +19,7 @@ import { toast } from "sonner";
 import { setLoading } from "../redux/authSlice";
 import axios from "axios";
 import { Loader2 } from "lucide-react";
+import { setBlog } from "../redux/blogSlice";
 
 const UpdateBlog = () => {
   const editor = useRef(null);
@@ -39,6 +40,8 @@ const UpdateBlog = () => {
   });
 
   const [preview, setPreview] = useState(selectBlog?.thumbnail);
+
+  const [publish, setPublish] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -95,6 +98,47 @@ const UpdateBlog = () => {
     }
   };
 
+  const togglePublish = async (action) => {
+    console.log(action);
+    try {
+      const res = await axios.patch(`http://localhost:8000/api/v1/blog/${id}`, {
+        params: { action },
+        withCredentials: true,
+      });
+
+      if (res.data.success) {
+        setPublish(!publish);
+        toast.success(res.data.message);
+        navigate("/dashboard/your-blog");
+      } else {
+        toast.error("Failed to Update");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const deleteBlog = async () => {
+    try {
+      const res = await axios.delete(
+        `http://localhost:8000/api/v1/blog/delete/${id}`,
+        {
+          withCredentials: true,
+        }
+      );
+
+      if (res.data.success) {
+        const updatedBlogData = blog.filter((bItem) => bItem?._id !== id);
+        dispatch(setBlog(updatedBlogData));
+        toast.success(res.data.message);
+        navigate("/dashboard/your-blog");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong");
+    }
+  };
+
   return (
     <div className="md:ml-80 pt-20 px-3 pb-10">
       <div className="max-w-6xl mx-auto mt-8">
@@ -104,8 +148,16 @@ const UpdateBlog = () => {
             Make changes to your blogs here. Click publish when you are done.
           </p>
           <div className="space-x-2">
-            <Button>Publish</Button>
-            <Button variant="destructive">Remove Blog</Button>
+            <Button
+              onClick={() =>
+                togglePublish(selectBlog.isPublished ? "false" : "true")
+              }
+            >
+              {selectBlog.isPublished ? "Unpublish" : "Publish"}
+            </Button>
+            <Button onClick={deleteBlog} variant="destructive">
+              Remove Blog
+            </Button>
           </div>
 
           <div className="pt-3">
