@@ -85,3 +85,83 @@ export const getCommentsOfPost = async (req, res) => {
     });
   }
 };
+
+export const deleteComment = async (req, res) => {
+  try {
+    const commentId = req.params.id;
+    const authorId = req.id;
+    const comment = await Comment.findById(commentId);
+    if (!comment) {
+      return res.status(404).json({
+        success: false,
+        message: "Comment Not Found",
+      });
+    }
+    if (comment.userId.toString() !== authorId) {
+      return res.status(403).json({
+        success: false,
+        message: "Unauthorized to delete this comment",
+      });
+    }
+
+    const blogId = comment.postId;
+
+    await Comment.findByIdAndDelete(commentId);
+
+    await Blog.findByIdAndUpdate(blogId, {
+      $pull: { comments: commentId },
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Comment Deleted SUccessfully",
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to Delete Comment",
+      error: error.message,
+    });
+  }
+};
+
+export const editComment = async (req, res) => {
+  try {
+    const userId = req.id;
+    const { content } = req.body;
+    const commentId = req.params.id;
+    const comment = await Comment.findById(commentId);
+    if (!comment) {
+      return res.stattus(404).json({
+        success: false,
+        message: "Comment Not Found",
+      });
+    }
+
+    if (comment.userId.toString() !== userId) {
+      return res.stattus(403).json({
+        success: false,
+        message: "Not authorized to edit this comment",
+      });
+    }
+
+    comment.content = content;
+    comment.editedAt = new Date();
+
+    await comment.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Comment Updated Successfully",
+      comment,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to Edit Comment",
+      error: error.message,
+    });
+  }
+};
