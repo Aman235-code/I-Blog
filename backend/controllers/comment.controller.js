@@ -43,7 +43,39 @@ export const createComment = async (req, res) => {
       message: "Comment Added",
       comment,
     });
-    
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to Create Comment",
+      error: error.message,
+    });
+  }
+};
+
+export const getCommentsOfPost = async (req, res) => {
+  try {
+    const blogId = req.params.id;
+    const comments = await Comment.find({ postId: blogId })
+      .populate({
+        path: "userId",
+        select: "firstName lastName photoUrl",
+      })
+      .sort({
+        createdAt: -1,
+      });
+
+    if (!comments) {
+      return res.status(404).json({
+        success: false,
+        message: "No comments found in this blog",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      comments,
+    });
   } catch (error) {
     console.log(error);
     return res.status(500).json({
