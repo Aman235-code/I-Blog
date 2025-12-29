@@ -165,3 +165,67 @@ export const editComment = async (req, res) => {
     });
   }
 };
+
+export const likeComment = async (req, res) => {
+  try {
+    const userId = req.id;
+    const commentId = req.params.id;
+    const comment = await Comment.findById(commentId).populate("userId");
+    if (!comment) {
+      return res.status(404).json({
+        success: false,
+        message: "Comment Not Found",
+      });
+    }
+
+    const alreadyLiked = comment.likes.includes(userId);
+    if (alreadyLiked) {
+      comment.likes = comment.likes.filter((id) => id !== userId);
+      comment.numberOfLikes -= 1;
+    } else {
+      comment.likes.push(userId);
+      comment.numberOfLikes += 1;
+    }
+
+    await comment.save();
+    return res.status(200).json({
+      success: true,
+      message: alreadyLiked ? "Comment Unliked" : "Comment Liked",
+      updatedComment: comment,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to Like Comment",
+      error: error.message,
+    });
+  }
+};
+
+export const getAllCommentsOnBlog = async (req, res) => {
+  try {
+    const userId = req.id;
+    const myBlogs = await Blog.find({ author: userId }).select("_id");
+    const blogIds = myBlogs.map((blog) => blog._id);
+    if (blogIds.length == 0) {
+      return res.status(200).json({
+        success: true,
+        totalComments: 0,
+        comments: [],
+        message: "No Blogs found for this user",
+      });
+    }
+
+    const comments = await Comment.find({ postId: { $in: blogIds } }).populate(
+      "userId", "firstName"
+    );
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to get Comments",
+      error: error.message,
+    });
+  }
+};
