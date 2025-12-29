@@ -217,9 +217,15 @@ export const getAllCommentsOnBlog = async (req, res) => {
       });
     }
 
-    const comments = await Comment.find({ postId: { $in: blogIds } }).populate(
-      "userId", "firstName"
-    );
+    const comments = await Comment.find({ postId: { $in: blogIds } })
+      .populate("userId", "firstName lastName email")
+      .populate("postId", "title");
+
+    return res.status(200).json({
+      success: true,
+      totalComments: comments.length,
+      comments,
+    })
   } catch (error) {
     console.log(error);
     return res.status(500).json({
