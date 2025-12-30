@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,12 +10,22 @@ import { setComment } from "../redux/commentSlice";
 import { FaRegHeart } from "react-icons/fa";
 import { toast } from "sonner";
 import { setBlog } from "../redux/blogSlice";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../components/ui/dropdown-menu";
+import { BsThreeDots } from "react-icons/bs";
+import { Edit, Trash2 } from "lucide-react";
 
 const CommentBox = ({ selectedBlog }) => {
   const dispatch = useDispatch();
   const { comment } = useSelector((store) => store.comment);
   const { blog } = useSelector((store) => store.blog);
   const [content, setContent] = useState("");
+  const [editing, setEditing] = useState("");
+  const [editingId, setEditingId] = useState(null);
   useEffect(() => {
     const getAllCommentsOfBlog = async () => {
       try {
@@ -41,7 +52,58 @@ const CommentBox = ({ selectedBlog }) => {
     }
   };
 
-  const commentHandler = async (e) => {
+  const deleteComment = async (commentId) => {
+    try {
+      const res = await axios.delete(
+        `http://localhost:8000/api/v1/comment/${commentId}/delete`,
+        {
+          withCredentials: true,
+        }
+      );
+      if (res.data.success) {
+        const updatedCommentData = comment.filter(
+          (item) => item._id !== commentId
+        );
+        dispatch(setComment(updatedCommentData));
+        toast.success(res.data.message);
+      }
+    } catch (error) {
+      console.log(error.message);
+      toast.error(error.message);
+    }
+  };
+
+  const editCommentHandler = async (commentId) => {
+    try {
+      const res = await axios.put(
+        `http://localhost:8000/api/v1/comment/${commentId}/edit`,
+        {
+          content: editing,
+        },
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (res.data.success) {
+        const updatedCommentData = comment.map((item) =>
+          item._id === commentId ? { ...item, content: editing } : item
+        );
+        dispatch(setComment(updatedCommentData));
+        toast.success(res.data.message);
+        setEditingId(null);
+        setEditing("");
+      }
+    } catch (error) {
+      console.log(error.message);
+      toast.error(error.message);
+    }
+  };
+
+  const commentHandler = async () => {
     try {
       const res = await axios.post(
         `http://localhost:8000/api/v1/comment/${selectedBlog._id}/create`,
@@ -118,7 +180,31 @@ const CommentBox = ({ selectedBlog }) => {
                           yesterday
                         </span>
                       </h1>
-                      <p>{item?.content}</p>
+                      {editingId === item?._id ? (
+                        <>
+                          <Textarea
+                            value={editing}
+                            onChange={(e) => setEditing(e.target.value)}
+                            className={"mb-2 bg-gray-200 dark:bg-gray-700"}
+                          />
+                          <div className="flex py-1 gap-2">
+                            <Button
+                              onClick={() => editCommentHandler(item._id)}
+                            >
+                              Save
+                            </Button>
+                            <Button
+                              variant="outline"
+                              onClick={() => setEditingId(null)}
+                            >
+                              Cancel
+                            </Button>
+                          </div>
+                        </>
+                      ) : (
+                        <p>{item?.content}</p>
+                      )}
+
                       <div className="flex gap-5 items-center">
                         <div className="flex gap-2 items-center">
                           <div className="flex gap-1 items-center cursor-pointer">
@@ -130,6 +216,31 @@ const CommentBox = ({ selectedBlog }) => {
                       </div>
                     </div>
                   </div>
+                  {user._id === item?.userId?._id ? (
+                    <DropdownMenu>
+                      <DropdownMenuTrigger>
+                        <BsThreeDots />
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent>
+                        <DropdownMenuItem
+                          onClick={() => {
+                            setEditingId(item._id);
+                            setEditing(item.content);
+                          }}
+                        >
+                          <Edit />
+                          Edit
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => deleteComment(item._id)}
+                          className={"text-red-500"}
+                        >
+                          <Trash2 />
+                          Delete
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  ) : null}
                 </div>
               </div>
             );
