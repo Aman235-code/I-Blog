@@ -14,6 +14,7 @@ import WriteBlog from "./pages/WriteBlog";
 import UpdateBlog from "./pages/UpdateBlog";
 import BlogView from "./pages/BlogView";
 import Footer from "./components/Footer";
+import SearchList from "./pages/SearchList";
 
 const router = createBrowserRouter([
   {
@@ -42,6 +43,16 @@ const router = createBrowserRouter([
       <>
         <Navbar />
         <About />,
+        <Footer />
+      </>
+    ),
+  },
+  {
+    path: "/search",
+    element: (
+      <>
+        <Navbar />
+        <SearchList />
         <Footer />
       </>
     ),

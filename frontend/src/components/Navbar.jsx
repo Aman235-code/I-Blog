@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from "../assets/logo.png";
 import { Input } from "./ui/input";
@@ -30,6 +30,16 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchTerm.trim() !== "") {
+      navigate(`/search?q=${encodeURIComponent(searchTerm)}`);
+      setSearchTerm("");
+    }
+  };
+
   const handleLogout = async () => {
     try {
       const res = await axios.get(`http://localhost:8000/api/v1/user/logout`, {
@@ -60,11 +70,13 @@ const Navbar = () => {
             <Input
               type="text"
               placeholder="Search..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
               className={
                 "border border-gray-700 dark:bg-gray-900 bg-gray-300 w-75 hidden md:block"
               }
             />
-            <Button className={"absolute right-0 top-0"}>
+            <Button onClick={handleSearch} className={"absolute right-0 top-0"}>
               <Search />
             </Button>
           </div>
