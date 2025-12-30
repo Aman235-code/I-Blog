@@ -7,7 +7,7 @@ import { Button } from "./ui/button";
 import { LuSend } from "react-icons/lu";
 import axios from "axios";
 import { setComment } from "../redux/commentSlice";
-import { FaRegHeart } from "react-icons/fa";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { toast } from "sonner";
 import { setBlog } from "../redux/blogSlice";
 import {
@@ -138,6 +138,28 @@ const CommentBox = ({ selectedBlog }) => {
     }
   };
 
+  const likeCommentHandler = async (commentId) => {
+    try {
+      const res = await axios.get(
+        `http://localhost:8000/api/v1/comment/${commentId}/like`,
+        {
+          withCredentials: true,
+        }
+      );
+      if (res.data.success) {
+        const updatedComment = res.data.updatedComment;
+        const updatedCommentList = comment.map((item) =>
+          item._id === commentId ? updatedComment : item
+        );
+        dispatch(setComment(updatedCommentList));
+        toast.success(res.data.message);
+      }
+    } catch (error) {
+      console.log(error.message);
+      toast.error(error.message);
+    }
+  };
+
   const { user } = useSelector((store) => store.auth);
   return (
     <div>
@@ -207,8 +229,16 @@ const CommentBox = ({ selectedBlog }) => {
 
                       <div className="flex gap-5 items-center">
                         <div className="flex gap-2 items-center">
-                          <div className="flex gap-1 items-center cursor-pointer">
-                            <FaRegHeart />
+                          <div
+                            onClick={() => likeCommentHandler(item._id)}
+                            className="flex gap-1 items-center cursor-pointer"
+                          >
+                            {item.likes.includes(user._id) ? (
+                              <FaHeart fill="red" />
+                            ) : (
+                              <FaRegHeart />
+                            )}
+
                             <span>{item?.numberOfLikes}</span>
                           </div>
                         </div>
