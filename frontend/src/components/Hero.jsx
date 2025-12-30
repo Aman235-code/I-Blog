@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
-import  Blog  from "../assets/blog2.png";
+import Blog from "../assets/blog2.png";
 
 const Hero = () => {
   return (
@@ -17,10 +17,10 @@ const Hero = () => {
             development, digital marketing, and tech innovations
           </p>
           <div className="flex space-x-4">
-            <Link>
+            <Link to={"/dashboard/write-blog"}>
               <Button className={"text-lg"}>Get Started</Button>
             </Link>
-            <Link>
+            <Link to={"/about"}>
               <Button
                 variant="outline"
                 className={"border-white px-6 py-3 text-lg"}

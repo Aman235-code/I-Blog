@@ -77,7 +77,7 @@ const YourBlog = () => {
         <Card className={"w-full p-5 space-y-2 dark:bg-gray-800"}>
           <Table>
             <TableCaption>A list of your recent blogs.</TableCaption>
-            <TableHeader>
+            <TableHeader className={"overflow-x-auto"}>
               <TableRow>
                 <TableHead>Title</TableHead>
                 <TableHead>Category</TableHead>
@@ -85,7 +85,7 @@ const YourBlog = () => {
                 <TableHead className="text-center">Action</TableHead>
               </TableRow>
             </TableHeader>
-            <TableBody>
+            <TableBody className={"overflow-x-auto"}>
               {blog.map((item, index) => (
                 <TableRow key={index}>
                   <TableCell className="flex gap-4 items-center">
@@ -93,7 +93,10 @@ const YourBlog = () => {
                       src={item.thumbnail}
                       className="w-20 rounded-md hidden md:block"
                     />
-                    <h1 onClick={()=> navigate(`/blogs/${item._id}`)} className="hover:underline cursor-pointer">
+                    <h1
+                      onClick={() => navigate(`/blogs/${item._id}`)}
+                      className="hover:underline cursor-pointer w-20 md:w-full truncate"
+                    >
                       {item.title}
                     </h1>
                   </TableCell>

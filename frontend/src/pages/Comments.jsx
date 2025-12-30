@@ -56,7 +56,7 @@ const Comments = () => {
               {allComments.map((comment, index) => (
                 <TableRow key={index}>
                   <TableCell className="font-medium">
-                    {comment.postId.title}
+                    <h1 className="w-15 truncate md:w-full">{comment.postId.title}</h1>
                   </TableCell>
                   <TableCell>{comment.content}</TableCell>
                   <TableCell>{comment.userId.firstName}</TableCell>

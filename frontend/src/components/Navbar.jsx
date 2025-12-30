@@ -23,6 +23,8 @@ import {
 } from "../components/ui/dropdown-menu";
 import { LiaCommentSolid } from "react-icons/lia";
 import userLogo from "../assets/userlogo.png";
+import { HiMenuAlt1, HiMenuAlt3 } from "react-icons/hi";
+import ResponsiveMenu from "./ResponsiveMenu";
 
 const Navbar = () => {
   const { user } = useSelector((store) => store.auth);
@@ -31,6 +33,7 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const [searchTerm, setSearchTerm] = useState("");
+  const [openNav, setOpenNav] = useState(false);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -39,6 +42,10 @@ const Navbar = () => {
       setSearchTerm("");
     }
   };
+
+  const toggleNav =()=> {
+    setOpenNav(!openNav)
+  }
 
   const handleLogout = async () => {
     try {
@@ -153,7 +160,9 @@ const Navbar = () => {
                   </DropdownMenuContent>
                 </DropdownMenu>
 
-                <Button onClick={handleLogout}>Logout</Button>
+                <Button className="hidden md:block" onClick={handleLogout}>
+                  Logout
+                </Button>
               </div>
             ) : (
               <div className="ml-7 md:flex gap-2">
@@ -166,7 +175,17 @@ const Navbar = () => {
               </div>
             )}
           </div>
+          {openNav ? (
+            <HiMenuAlt3 onClick={toggleNav} className="w-7 h-7 md:hidden" />
+          ) : (
+            <HiMenuAlt1 onClick={toggleNav} className="w-7 h-7 md:hidden" />
+          )}
         </nav>
+        <ResponsiveMenu
+          openNav={openNav}
+          setOpenNav={setOpenNav}
+          logoutHandler={handleLogout}
+        />
       </div>
     </div>
   );
