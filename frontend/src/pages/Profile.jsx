@@ -23,6 +23,7 @@ import { toast } from "sonner";
 import axios from "axios";
 import { setLoading, setUser } from "../redux/authSlice";
 import { Loader2 } from "lucide-react";
+import TotalProperty from "../components/TotalProperty";
 
 const Profile = () => {
   const { user, loading } = useSelector((store) => store.auth);
@@ -288,6 +289,7 @@ const Profile = () => {
           </div>
         </Card>
       </div>
+      <TotalProperty />
     </div>
   );
 };
