@@ -37,7 +37,7 @@ const WriteBlog = () => {
     try {
       dispatch(setLoading(true));
       const res = await axios.post(
-        "http://localhost:8000/api/v1/blog/create",
+        `${import.meta.env.VITE_API_URL}/api/v1/blog/create`,
         { title, category },
         {
           headers: { "Content-Type": "application/json" },

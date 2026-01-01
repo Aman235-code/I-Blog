@@ -77,7 +77,7 @@ const UpdateBlog = () => {
     try {
       dispatch(setLoading(true));
       const res = await axios.put(
-        `http://localhost:8000/api/v1/blog/update/${id}`,
+        `${import.meta.env.VITE_API_URL}/api/v1/blog/update/${id}`,
         formData,
         {
           headers: {
@@ -99,7 +99,7 @@ const UpdateBlog = () => {
 
   const togglePublish = async (action) => {
     try {
-      const res = await axios.patch(`http://localhost:8000/api/v1/blog/${id}`, {
+      const res = await axios.patch(`${import.meta.env.VITE_API_URL}/api/v1/blog/${id}`, {
         params: { action },
         withCredentials: true,
       });
@@ -119,7 +119,7 @@ const UpdateBlog = () => {
   const deleteBlog = async () => {
     try {
       const res = await axios.delete(
-        `http://localhost:8000/api/v1/blog/delete/${id}`,
+        `${import.meta.env.VITE_API_URL}/api/v1/blog/delete/${id}`,
         {
           withCredentials: true,
         }

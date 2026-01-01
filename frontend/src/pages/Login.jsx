@@ -10,13 +10,7 @@ import {
 import { Label } from "../components/ui/label";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
-import {
-  Eye,
-  EyeOff,
-  Loader2,
-  Mail,
-  Lock,
-} from "lucide-react";
+import { Eye, EyeOff, Loader2, Mail, Lock } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "sonner";
@@ -45,7 +39,7 @@ const Login = () => {
     try {
       dispatch(setLoading(true));
       const res = await axios.post(
-        "http://localhost:8000/api/v1/user/login",
+        `${import.meta.env.VITE_API_URL}/api/v1/user/login`,
         input,
         {
           headers: { "Content-Type": "application/json" },
@@ -74,11 +68,7 @@ const Login = () => {
         transition={{ duration: 0.6 }}
         className="hidden md:block h-full"
       >
-        <img
-          src={auth}
-          alt="login"
-          className="h-full w-full object-cover"
-        />
+        <img src={auth} alt="login" className="h-full w-full object-cover" />
       </motion.div>
 
       {/* Form Section */}

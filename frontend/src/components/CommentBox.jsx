@@ -30,7 +30,7 @@ const CommentBox = ({ selectedBlog }) => {
     const getAllCommentsOfBlog = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:8000/api/v1/comment/${selectedBlog._id}/comment/all`,
+          `${import.meta.env.VITE_API_URL}/api/v1/comment/${selectedBlog._id}/comment/all`,
           { withCredentials: true }
         );
         const data = res.data.comments;
@@ -55,7 +55,7 @@ const CommentBox = ({ selectedBlog }) => {
   const deleteComment = async (commentId) => {
     try {
       const res = await axios.delete(
-        `http://localhost:8000/api/v1/comment/${commentId}/delete`,
+        `${import.meta.env.VITE_API_URL}/api/v1/comment/${commentId}/delete`,
         {
           withCredentials: true,
         }
@@ -76,7 +76,7 @@ const CommentBox = ({ selectedBlog }) => {
   const editCommentHandler = async (commentId) => {
     try {
       const res = await axios.put(
-        `http://localhost:8000/api/v1/comment/${commentId}/edit`,
+        `${import.meta.env.VITE_API_URL}/api/v1/comment/${commentId}/edit`,
         {
           content: editing,
         },
@@ -106,7 +106,7 @@ const CommentBox = ({ selectedBlog }) => {
   const commentHandler = async () => {
     try {
       const res = await axios.post(
-        `http://localhost:8000/api/v1/comment/${selectedBlog._id}/create`,
+        `${import.meta.env.VITE_API_URL}/api/v1/comment/${selectedBlog._id}/create`,
         { content },
         {
           headers: {
@@ -141,7 +141,7 @@ const CommentBox = ({ selectedBlog }) => {
   const likeCommentHandler = async (commentId) => {
     try {
       const res = await axios.get(
-        `http://localhost:8000/api/v1/comment/${commentId}/like`,
+        `${import.meta.env.VITE_API_URL}/api/v1/comment/${commentId}/like`,
         {
           withCredentials: true,
         }

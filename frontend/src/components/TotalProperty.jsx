@@ -14,7 +14,7 @@ const TotalProperty = () => {
 
   const getOwnBlog = async () => {
     try {
-      const res = await axios.get(`http://localhost:8000/api/v1/blog/blogs`, {
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/blog/blogs`, {
         withCredentials: true,
       });
       if (res.data.success) {
@@ -28,7 +28,7 @@ const TotalProperty = () => {
   const getToalComments = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:8000/api/v1/comment/my-blogs/comment`,
+        `${import.meta.env.VITE_API_URL}/api/v1/comment/my-blogs/comment`,
         { withCredentials: true }
       );
       if (res.data.success) {
@@ -42,7 +42,7 @@ const TotalProperty = () => {
   const getTotalLikes = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:8000/api/v1/blog/my-blogs/likes`,
+        `${import.meta.env.VITE_API_URL}/api/v1/blog/my-blogs/likes`,
         { withCredentials: true }
       );
       if (res.data.success) {
