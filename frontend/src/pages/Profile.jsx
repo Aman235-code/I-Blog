@@ -1,7 +1,7 @@
 import { Avatar, AvatarImage } from "../components/ui/avatar";
 import { Card } from "../components/ui/card";
 import React, { useState } from "react";
-import userLogo from "../assets/userLogo.png";
+import userLogo from "../assets/userlogo.png";
 import { Link, useNavigate } from "react-router-dom";
 import { FaFacebook, FaGithub, FaInstagram, FaLinkedin } from "react-icons/fa";
 import { Label } from "../components/ui/label";
