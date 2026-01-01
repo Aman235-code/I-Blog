@@ -13,8 +13,6 @@ const app = express();
 
 const PORT = process.env.PORT || 3000;
 
-import cors from "cors";
-
 app.use(
   cors({
     origin: ["https://i-blog-blush.vercel.app", "http://localhost:5173"],
