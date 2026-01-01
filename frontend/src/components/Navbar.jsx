@@ -37,157 +37,158 @@ const Navbar = () => {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    if (searchTerm.trim() !== "") {
-      navigate(`/search?q=${encodeURIComponent(searchTerm)}`);
-      setSearchTerm("");
-    }
+    if (!searchTerm.trim()) return;
+    navigate(`/search?q=${encodeURIComponent(searchTerm)}`);
+    setSearchTerm("");
   };
-
-  const toggleNav =()=> {
-    setOpenNav(!openNav)
-  }
 
   const handleLogout = async () => {
     try {
-      const res = await axios.get(`http://localhost:8000/api/v1/user/logout`, {
+      const res = await axios.get("http://localhost:8000/api/v1/user/logout", {
         withCredentials: true,
       });
       if (res.data.success) {
-        navigate("/login");
         dispatch(setUser(null));
+        navigate("/login");
         toast.success(res.data.message);
       }
     } catch (error) {
-      console.log(error);
-      toast.error(error.message);
+      toast.error("Logout failed");
     }
   };
+
   return (
-    <div className="py-2 fixed w-full dark:bg-gray-800 dark:border-b-gray-600 border-b-gray-300 border-2 bg-white z-50">
-      <div className="max-w-7xl mx-auto flex justify-between items-center px-4 md:px-0">
-        {/* logo section  */}
-        <div className="flex gap-7 items-center">
-          <Link to={"/"}>
-            <div className="flex gap-2 items-center">
-              <img src={Logo} className="w-7 h-7 md:w-10 md:h-10 dark:invert" />
-              <h1 className="font-bold text-3xl md:text-4xl">I-Blog</h1>
-            </div>
-          </Link>
-          <div className="relative hidden md:block">
-            <Input
-              type="text"
-              placeholder="Search..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className={
-                "border border-gray-700 dark:bg-gray-900 bg-gray-300 w-75 hidden md:block"
-              }
-            />
-            <Button onClick={handleSearch} className={"absolute right-0 top-0"}>
-              <Search />
-            </Button>
+    <>
+      <header className="fixed top-0 left-0 w-full z-50 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+        <div className="max-w-7xl mx-auto h-16 px-4 flex items-center justify-between">
+          {/* Left */}
+          <div className="flex items-center gap-6">
+            <Link to="/" className="flex items-center gap-2">
+              <img
+                src={Logo}
+                alt="logo"
+                className="w-8 h-8 md:w-9 md:h-9 dark:invert"
+              />
+              <h1 className="text-xl md:text-2xl font-bold">I-Blog</h1>
+            </Link>
+
+            {/* Search */}
+            <form onSubmit={handleSearch} className="hidden md:flex relative">
+              <Input
+                type="text"
+                placeholder="Search blogs..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-64 pr-10 dark:bg-gray-900"
+              />
+              <Button
+                type="submit"
+                size="icon"
+                className="absolute right-1 top-1/2 -translate-y-1/2 cursor-pointer"
+              >
+                <Search size={18} />
+              </Button>
+            </form>
           </div>
-        </div>
 
-        {/* nav section  */}
-        <nav className="flex md:gap-7 gap-4 items-center">
-          <ul className="hidden md:flex gap-7 items-center text-xl font-semibold">
-            <Link to={"/"}>
-              <li>Home</li>
-            </Link>
-            <Link to={"/blogs"}>
-              <li>Blogs</li>
-            </Link>
-            <Link to={"/about"}>
-              <li>About</li>
-            </Link>
-          </ul>
-
-          <div className="flex">
-            <Button onClick={() => dispatch(toggleTheme())}>
+          {/* Right */}
+          <div className="flex items-center gap-3">
+            {/* Theme toggle */}
+            <Button
+              size="icon"
+              variant="outline"
+              className={"cursor-pointer"}
+              onClick={() => dispatch(toggleTheme())}
+            >
               {theme === "light" ? <FaMoon /> : <FaSun />}
             </Button>
+
+            {/* Desktop nav */}
+            <ul className="hidden md:flex gap-6 font-medium">
+              <Link to="/">Home</Link>
+              <Link to="/blogs">Blogs</Link>
+              <Link to="/about">About</Link>
+            </ul>
+
+            {/* User */}
             {user ? (
-              <div className="ml-7 flex gap-3 items-center">
+              <div className="hidden md:flex items-center gap-3">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="outline">
-                      {" "}
-                      <Avatar>
+                    <Button variant="outline" size="icon">
+                      <Avatar className="w-8 h-8">
                         <AvatarImage src={user.photoUrl || userLogo} />
-                        <AvatarFallback>CN</AvatarFallback>
+                        <AvatarFallback>U</AvatarFallback>
                       </Avatar>
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-56" align="start">
+
+                  <DropdownMenuContent className="w-56">
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
                     <DropdownMenuGroup>
                       <DropdownMenuItem
                         onClick={() => navigate("/dashboard/profile")}
                       >
-                        <User />
-                        Profile
-                        <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+                        <User /> Profile
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         onClick={() => navigate("/dashboard/your-blog")}
                       >
-                        <ChartColumnBig />
-                        Your Blogs
-                        <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
+                        <ChartColumnBig /> Your Blogs
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         onClick={() => navigate("/dashboard/comments")}
                       >
-                        <LiaCommentSolid />
-                        Comments
-                        <DropdownMenuShortcut>⌘K</DropdownMenuShortcut>
+                        <LiaCommentSolid /> Comments
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         onClick={() => navigate("/dashboard/write-blog")}
                       >
-                        <FaRegEdit />
-                        Write Blog
-                        <DropdownMenuShortcut>⌘W</DropdownMenuShortcut>
+                        <FaRegEdit /> Write Blog
                       </DropdownMenuItem>
                     </DropdownMenuGroup>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem>
-                      <LogOut />
-                      Log out
-                      <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+                    <DropdownMenuItem onClick={handleLogout}>
+                      <LogOut /> Logout
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
-
-                <Button className="hidden md:block" onClick={handleLogout}>
-                  Logout
-                </Button>
               </div>
             ) : (
-              <div className="ml-7 md:flex gap-2">
-                <Link to={"/login"}>
-                  <Button>Login</Button>
+              <div className="hidden md:flex gap-2 cursor-pointer">
+                <Link to="/login">
+                  <Button className={"cursor-pointer"} variant="outline">
+                    Login
+                  </Button>
                 </Link>
-                <Link to={"/signup"}>
-                  <Button>Signup</Button>
+                <Link to="/signup">
+                  <Button className={"cursor-pointer"}>Signup</Button>
                 </Link>
               </div>
             )}
+
+            {/* Mobile menu toggle */}
+            <button onClick={() => setOpenNav(!openNav)} className="md:hidden">
+              {openNav ? (
+                <HiMenuAlt3 className="w-7 h-7" />
+              ) : (
+                <HiMenuAlt1 className="w-7 h-7" />
+              )}
+            </button>
           </div>
-          {openNav ? (
-            <HiMenuAlt3 onClick={toggleNav} className="w-7 h-7 md:hidden" />
-          ) : (
-            <HiMenuAlt1 onClick={toggleNav} className="w-7 h-7 md:hidden" />
-          )}
-        </nav>
-        <ResponsiveMenu
-          openNav={openNav}
-          setOpenNav={setOpenNav}
-          logoutHandler={handleLogout}
-        />
-      </div>
-    </div>
+        </div>
+      </header>
+
+      {/* Mobile menu */}
+      <ResponsiveMenu
+        openNav={openNav}
+        setOpenNav={setOpenNav}
+        logoutHandler={handleLogout}
+      />
+
+      {/* Spacer for fixed navbar */}
+      <div className="h-16" />
+    </>
   );
 };
 

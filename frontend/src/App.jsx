@@ -62,7 +62,7 @@ const router = createBrowserRouter([
     element: (
       <>
         <Navbar />
-        <Login />,
+        <Login />
       </>
     ),
   },
@@ -71,7 +71,7 @@ const router = createBrowserRouter([
     element: (
       <>
         <Navbar />
-        <SignUp />,
+        <SignUp />
       </>
     ),
   },

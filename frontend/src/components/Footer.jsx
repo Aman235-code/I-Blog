@@ -10,56 +10,75 @@ import {
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-800 text-gray-200 py-10">
-      <div className="max-w-7xl mx-auto px-4 md:flex md:justify-between">
-        <div className="mb-6 md:mb-0">
-          <Link to={"/"}>
-            <img src={Logo} className="invert w-12 h-32/" />
-            <h1 className="text-3xl font-bold">I-Blog</h1>
+    <footer className="bg-gray-900 text-gray-300">
+      <div className="max-w-7xl mx-auto px-4 py-14 grid gap-10 sm:grid-cols-2 md:grid-cols-4">
+        
+        {/* Brand */}
+        <div>
+          <Link to="/" className="flex items-center gap-3 mb-4">
+            <img src={Logo} className="w-10 h-10 invert" alt="I-Blog" />
+            <h1 className="text-2xl font-bold text-white">I-Blog</h1>
           </Link>
 
-          <p className="mt-2">
-            Sharing insights, tutorials and ideas on web development and tech
+          <p className="text-sm leading-relaxed">
+            Sharing insights, tutorials and ideas on web development and tech.
           </p>
-          <p className="mt-2 text-sm">123 Blog St, Style City, NY 10001</p>
-          <p className="text-sm">Email: support@iblog.com</p>
-          <p className="text-sm">Phone: (123) 456-7890</p>
-        </div>
 
-        <div className="mb-6 md:mb-0">
-          <h3 className="text-xl font-semibold">Quick Links</h3>
-          <ul className="mt-2 text-sm space-y-2">
-            <li>Home</li>
-            <li>Blogs</li>
-            <li>About Us</li>
-            <li>FAQs</li>
-          </ul>
-        </div>
-
-        <div className="mb-6 md:mb-0">
-          <h3 className="text-xl font-semibold">Follow Us</h3>
-          <div className="flex space-x-4 mt-2">
-            <FaFacebook />
-            <FaInstagram />
-            <FaTwitterSquare />
-            <FaPinterest />
+          <div className="mt-4 text-sm space-y-1">
+            <p>123 Blog St, Style City</p>
+            <p>Email: support@iblog.com</p>
+            <p>Phone: (123) 456-7890</p>
           </div>
         </div>
 
+        {/* Quick Links */}
         <div>
-          <h3 className="text-xl font-semibold">Stay in the Loop</h3>
-          <p className="mt-2 text-sm">
-            Subscribe to get special offers, free giveaways and more
+          <h3 className="text-lg font-semibold text-white mb-4">
+            Quick Links
+          </h3>
+          <ul className="space-y-2 text-sm">
+            {["Home", "Blogs", "About Us", "FAQs"].map((item) => (
+              <li
+                key={item}
+                className="hover:text-white transition cursor-pointer"
+              >
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Social */}
+        <div>
+          <h3 className="text-lg font-semibold text-white mb-4">
+            Follow Us
+          </h3>
+          <div className="flex gap-4 text-2xl">
+            <FaFacebook className="hover:text-white transition cursor-pointer" />
+            <FaInstagram className="hover:text-white transition cursor-pointer" />
+            <FaTwitterSquare className="hover:text-white transition cursor-pointer" />
+            <FaPinterest className="hover:text-white transition cursor-pointer" />
+          </div>
+        </div>
+
+        {/* Newsletter */}
+        <div>
+          <h3 className="text-lg font-semibold text-white mb-4">
+            Stay in the Loop
+          </h3>
+          <p className="text-sm mb-4">
+            Subscribe to get special offers and updates.
           </p>
-          <form action="" className="mt-4 flex">
+
+          <form className="flex">
             <input
               type="email"
-              placeholder="Your Email Address"
-              className="w-full p-2 rounded-l-md bg-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500"
+              placeholder="Your email"
+              className="flex-1 px-3 py-2 rounded-l-md bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-red-500"
             />
             <button
               type="submit"
-              className="bg-red-600 text-white px-4 rounded-r-md hover:bg-red-700"
+              className="px-4 py-2 bg-red-600 text-white text-sm rounded-r-md hover:bg-red-700 transition"
             >
               Subscribe
             </button>
@@ -67,11 +86,10 @@ const Footer = () => {
         </div>
       </div>
 
-      <div className="mt-8 border-t border-gray-700 pt-6 text-center text-sm">
-        <p>
-          &copy; {new Date().getFullYear()}{" "}
-          <span className="text-red-500">I-Blog</span>. All rights reserved
-        </p>
+      {/* Bottom */}
+      <div className="border-t border-gray-800 py-6 text-center text-sm">
+        © {new Date().getFullYear()}{" "}
+        <span className="text-red-500 font-medium">I-Blog</span>. All rights reserved.
       </div>
     </footer>
   );

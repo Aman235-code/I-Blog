@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import auth from "../assets/auth.jpg";
 import {
@@ -8,13 +9,14 @@ import {
 } from "../components/ui/card";
 import { Label } from "../components/ui/label";
 import { Input } from "../components/ui/input";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { Button } from "../components/ui/button";
+import { Eye, EyeOff, Loader2, Mail, Lock, User } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading } from "../redux/authSlice";
+import { motion } from "framer-motion";
 
 const SignUp = () => {
   const [showPass, setShowPass] = useState(false);
@@ -24,16 +26,14 @@ const SignUp = () => {
     email: "",
     password: "",
   });
+
   const navigate = useNavigate();
-  const { loading } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
+  const { loading } = useSelector((store) => store.auth);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setUser((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setUser((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
@@ -41,128 +41,147 @@ const SignUp = () => {
     try {
       dispatch(setLoading(true));
       const res = await axios.post(
-        `http://localhost:8000/api/v1/user/register`,
+        "http://localhost:8000/api/v1/user/register",
         user,
         {
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           withCredentials: true,
         }
       );
 
       if (res.data.success) {
-        navigate("/login");
         toast.success(res.data.message);
+        navigate("/login");
       }
     } catch (error) {
-      console.log(error);
-      toast.error(error.message);
+      toast.error(error?.response?.data?.message || "Something went wrong");
     } finally {
       dispatch(setLoading(false));
     }
   };
+
   return (
-    <div className="flex h-screen md:pt-14 md:h-170">
-      <div className="hidden md:block">
-        <img src={auth} className="h-165 w-175" />
-      </div>
+    <div className="flex h-screen md:pt-14">
+      {/* Left image */}
+      <motion.div
+        initial={{ opacity: 0, x: -40 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.6 }}
+        className="hidden md:block h-full"
+      >
+        <img src={auth} alt="auth" className="h-full w-full object-cover" />
+      </motion.div>
 
-      <div className="flex justify-center items-center flex-1 px-4 md:px-0">
-        <Card
-          className={
-            "w-full max-w-md p-6 shadow-lg rounded-2xl dark:bg-gray-800 dark:border-gray-600"
-          }
+      {/* Form */}
+      <div className="flex flex-1 items-center justify-center px-4">
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="w-full max-w-md"
         >
-          <CardHeader>
-            <CardTitle>
-              <h1 className="text-center text-xl font-semibold">
+          <Card className="rounded-2xl shadow-xl dark:bg-gray-800">
+            <CardHeader className="space-y-1">
+              <CardTitle className="text-center text-2xl font-bold">
                 Create an Account
-              </h1>
-            </CardTitle>
-            <p className="mt-2 text-sm font-serif text-center dark:text-gray-300">
-              Enter your details below to create your account
-            </p>
-          </CardHeader>
-          <CardContent>
-            <form className="space-y-4" onSubmit={handleSubmit}>
-              <div className="flex gap-3">
-                <div>
-                  <Label>First Name</Label>
-                  <Input
-                    type="text"
-                    placeholder="First Name"
-                    value={user.firstName}
-                    onChange={handleChange}
-                    name="firstName"
-                    className={"dark:border-gray-600 dark:bg-gray-900 "}
-                  />
-                </div>
-
-                <div>
-                  <Label>Last Name</Label>
-                  <Input
-                    type="text"
-                    placeholder="Last Name"
-                    value={user.lastName}
-                    onChange={handleChange}
-                    name="lastName"
-                    className={"dark:border-gray-600 dark:bg-gray-900 "}
-                  />
-                </div>
-              </div>
-
-              <div>
-                <Label>Email</Label>
-                <Input
-                  type="email"
-                  placeholder="john@example.com"
-                  value={user.email}
-                  onChange={handleChange}
-                  name="email"
-                  className={"dark:border-gray-600 dark:bg-gray-900 "}
-                />
-              </div>
-
-              <div className="relative">
-                <Label>Password</Label>
-                <Input
-                  type={showPass ? "text" : "password"}
-                  placeholder="Create a Password"
-                  name="password"
-                  value={user.password}
-                  onChange={handleChange}
-                  className={"dark:border-gray-600 dark:bg-gray-900 "}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPass(!showPass)}
-                  className="absolute right-3 top-5 text-gray-500"
-                >
-                  {showPass ? <Eye size={20} /> : <EyeOff size={20} />}
-                </button>
-              </div>
-              <Button type="submit" className={"w-full"}>
-                {loading ? (
-                  <>
-                    <Loader2 className="mr-2 w-4 h-4 animate-spin" />
-                    Please Wait
-                  </>
-                ) : (
-                  "Sign Up"
-                )}
-              </Button>
-              <p className="text-center text=gray-600 dark:text-gray-300">
-                Already have an account?{" "}
-                <Link to={"/login"}>
-                  <span className="underline cursor-pointer hover:text-gray-800 dark:hover:text-gray-100">
-                    Sign in
-                  </span>
-                </Link>
+              </CardTitle>
+              <p className="text-center text-sm text-gray-500 dark:text-gray-300">
+                Enter your details to get started
               </p>
-            </form>
-          </CardContent>
-        </Card>
+            </CardHeader>
+
+            <CardContent>
+              <form className="space-y-4" onSubmit={handleSubmit}>
+                {/* Name */}
+                <div className="flex gap-3">
+                  <div className="relative w-full">
+                    <Label>First Name</Label>
+                    <User className="absolute left-3 top-8 h-4 w-4 text-gray-400" />
+                    <Input
+                      name="firstName"
+                      value={user.firstName}
+                      onChange={handleChange}
+                      placeholder="John"
+                      className="pl-9 mt-2 dark:bg-gray-900"
+                    />
+                  </div>
+
+                  <div className="relative w-full">
+                    <Label>Last Name</Label>
+                    <User className="absolute left-3 top-8 h-4 w-4 text-gray-400" />
+                    <Input
+                      name="lastName"
+                      value={user.lastName}
+                      onChange={handleChange}
+                      placeholder="Doe"
+                      className="pl-9 mt-2 dark:bg-gray-900"
+                    />
+                  </div>
+                </div>
+
+                {/* Email */}
+                <div className="relative">
+                  <Label>Email</Label>
+                  <Mail className="absolute left-3 top-8 h-4 w-4 text-gray-400" />
+                  <Input
+                    type="email"
+                    name="email"
+                    value={user.email}
+                    onChange={handleChange}
+                    placeholder="john@example.com"
+                    className="pl-9 mt-2 dark:bg-gray-900"
+                  />
+                </div>
+
+                {/* Password */}
+                <div className="relative">
+                  <Label>Password</Label>
+                  <Lock className="absolute left-3 top-8 h-4 w-4 text-gray-400" />
+                  <Input
+                    type={showPass ? "text" : "password"}
+                    name="password"
+                    value={user.password}
+                    onChange={handleChange}
+                    placeholder="Create a strong password"
+                    className="pl-9 mt-2 pr-10 dark:bg-gray-900"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPass(!showPass)}
+                    className="absolute right-3 top-8 text-gray-500 hover:text-gray-700"
+                  >
+                    {showPass ? <Eye size={18} /> : <EyeOff size={18} />}
+                  </button>
+                </div>
+
+                {/* Submit */}
+                <motion.div whileTap={{ scale: 0.97 }}>
+                  <Button type="submit" className="w-full cursor-pointer">
+                    {loading ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Please wait
+                      </>
+                    ) : (
+                      "Sign Up"
+                    )}
+                  </Button>
+                </motion.div>
+
+                {/* Footer */}
+                <p className="text-center text-sm text-gray-600 dark:text-gray-300">
+                  Already have an account?{" "}
+                  <Link
+                    to="/login"
+                    className="font-medium underline hover:text-black dark:hover:text-white"
+                  >
+                    Sign in
+                  </Link>
+                </p>
+              </form>
+            </CardContent>
+          </Card>
+        </motion.div>
       </div>
     </div>
   );

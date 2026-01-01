@@ -126,3 +126,8 @@
 .jodit_toolbar {
   color: rgba(26,25,25,0.806)
 }
+
+/* html,
+body {
+  overflow-y: hidden;
+} */

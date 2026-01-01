@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import BlogCard from "../components/BlogCard";
 import { setBlog } from "../redux/blogSlice";
 import axios from "axios";

@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable react-hooks/set-state-in-effect */
 import { setBlog } from "../redux/blogSlice";
 import axios from "axios";
 import { BarChart3, Eye, MessageSquare, ThumbsUp } from "lucide-react";
