@@ -13,11 +13,11 @@ const app = express();
 
 const PORT = process.env.PORT || 3000;
 
+import cors from "cors";
+
 app.use(
   cors({
-    // origin: "http://localhost:5173",
-    // origin: "https://i-blog-k067.onrender.com",
-    origin: "*",
+    origin: ["https://i-blog-blush.vercel.app", "http://localhost:5173"],
     credentials: true,
   })
 );
