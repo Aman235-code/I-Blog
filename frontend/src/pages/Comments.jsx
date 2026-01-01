@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-hooks/set-state-in-effect */
 import { Card } from "../components/ui/card";
 import React, { useEffect, useState } from "react";
@@ -60,7 +61,7 @@ const Comments = () => {
       <div className="max-w-6xl mx-auto mt-8">
         {allComments && allComments.length > 0 ? (
           <Card className="w-full p-5 space-y-2 dark:bg-gray-800 overflow-x-auto">
-            <Table className="min-w-[600px]">
+            <Table className="min-w-150">
               <TableCaption className="text-left">
                 A list of comments on your blogs.
               </TableCaption>
@@ -76,12 +77,12 @@ const Comments = () => {
                 {allComments.map((comment) => (
                   <TableRow key={comment._id}>
                     <TableCell className="font-medium">
-                      <h1 className="truncate max-w-[120px] md:max-w-full cursor-pointer hover:underline"
+                      <h1 className="truncate max-w-30 md:max-w-full cursor-pointer hover:underline"
                           onClick={() => navigate(`/blogs/${comment.postId._id}`)}>
                         {comment.postId.title}
                       </h1>
                     </TableCell>
-                    <TableCell className="truncate max-w-[150px] md:max-w-full">
+                    <TableCell className="truncate max-w-37.5 md:max-w-full">
                       {comment.content}
                     </TableCell>
                     <TableCell>{comment.userId.firstName}</TableCell>

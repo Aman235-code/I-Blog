@@ -89,7 +89,7 @@ const YourBlog = () => {
       <div className="max-w-6xl mx-auto mt-8">
         {blog && blog.length > 0 ? (
           <Card className="w-full p-5 space-y-2 dark:bg-gray-800 overflow-x-auto">
-            <Table className="min-w-[600px]">
+            <Table className="min-w-150">
               <TableCaption className="text-left">
                 A list of your recent blogs.
               </TableCaption>
@@ -111,7 +111,7 @@ const YourBlog = () => {
                       />
                       <h1
                         onClick={() => navigate(`/blogs/${item._id}`)}
-                        className="hover:underline cursor-pointer truncate max-w-[150px] md:max-w-full"
+                        className="hover:underline cursor-pointer truncate max-w-37.5 md:max-w-full"
                       >
                         {item.title}
                       </h1>

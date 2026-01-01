@@ -150,7 +150,10 @@ const BlogView = () => {
             {selectedBlog.subtitle}
           </p>
         </div>
-        <p className={"text-justify"} dangerouslySetInnerHTML={{ __html: selectedBlog.description }} />
+        <p
+          className={"text-justify"}
+          dangerouslySetInnerHTML={{ __html: selectedBlog.description }}
+        />
         <div className="mt-10">
           <div className="flex flex-wrap gap-2 mb-8">
             <Badge variant="secondary" className={"dark:bg-gray-800"}>
@@ -188,7 +191,7 @@ const BlogView = () => {
 
               <Button variant="ghost">
                 <MessageSquare className="h-4 w-4" />
-                <span>1 Comments</span>
+                <span>{selectedBlog?.comments?.length > 0? selectedBlog?.comments?.length : 0} comments</span>
               </Button>
             </div>
 

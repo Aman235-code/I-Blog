@@ -180,7 +180,7 @@ const CommentBox = ({ selectedBlog }) => {
           value={content}
           onChange={changeEvent}
         />
-        <Button onClick={commentHandler}>
+        <Button className="cursor-pointer" onClick={commentHandler}>
           <LuSend />
         </Button>
       </div>

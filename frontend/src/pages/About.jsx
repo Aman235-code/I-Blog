@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import blogImg from "../assets/blog.jpg";
 
 const About = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <section className="min-h-screen pt-24 pb-16 px-4">
       <div className="max-w-6xl mx-auto">
-        
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-14">
           <h1 className="text-4xl sm:text-5xl font-extrabold mb-4">
@@ -18,7 +20,6 @@ const About = () => {
 
         {/* Content */}
         <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
-          
           {/* Image */}
           <div className="flex justify-center">
             <img
@@ -38,14 +39,12 @@ const About = () => {
             </p>
 
             <p>
-              Our mission is to empower individuals to express themselves freely.
-              We offer simple tools to write, publish, and engage with others in
-              meaningful ways.
+              Our mission is to empower individuals to express themselves
+              freely. We offer simple tools to write, publish, and engage with
+              others in meaningful ways.
             </p>
 
-            <p>
-              Thank you for being a part of our growing community.
-            </p>
+            <p>Thank you for being a part of our growing community.</p>
           </div>
         </div>
 

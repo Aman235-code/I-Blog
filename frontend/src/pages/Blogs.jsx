@@ -11,6 +11,10 @@ const Blogs = () => {
   const { blog } = useSelector((store) => store.blog);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
     const getAllPublishedBlogs = async () => {
       try {
         const res = await axios.get(
@@ -31,7 +35,6 @@ const Blogs = () => {
 
   return (
     <div className="pt-20 min-h-screen bg-gray-50 dark:bg-gray-900">
-      
       {/* Header */}
       <div className="max-w-6xl mx-auto text-center mb-12 px-4">
         <h1 className="text-4xl md:text-5xl font-bold mb-3">
@@ -47,9 +50,7 @@ const Blogs = () => {
       {/* Blog Grid */}
       <div className="max-w-6xl mx-auto grid gap-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 px-4 md:px-0 pb-16">
         {blog?.length > 0 ? (
-          blog.map((item, index) => (
-            <BlogCard blog={item} key={index} />
-          ))
+          blog.map((item, index) => <BlogCard blog={item} key={index} />)
         ) : (
           <div className="col-span-full text-center py-20">
             <h2 className="text-xl font-semibold mb-2">
