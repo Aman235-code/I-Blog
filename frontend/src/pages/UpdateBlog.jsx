@@ -98,7 +98,6 @@ const UpdateBlog = () => {
   };
 
   const togglePublish = async (action) => {
-
     try {
       const res = await axios.patch(`http://localhost:8000/api/v1/blog/${id}`, {
         params: { action },
@@ -139,7 +138,7 @@ const UpdateBlog = () => {
   };
 
   return (
-    <div className="md:ml-80 pt-20 px-3 pb-10">
+    <div className="md:ml-10 pt-5 px-3 pb-10">
       <div className="max-w-6xl mx-auto mt-8">
         <Card className={"w-full bg-white dark:bg-gray-800 p-5 -space-y-3"}>
           <h1 className="text-4xl font-bold">Basic Blog Information</h1>
@@ -233,11 +232,11 @@ const UpdateBlog = () => {
             )}
           </div>
 
-          <div className="flex gap-3">
+          <div className="flex gap-3 ">
             <Button variant="outline" onClick={() => navigate(-1)}>
               Back
             </Button>
-            <Button onClick={updateBlogHandler}>
+            <Button onClick={updateBlogHandler} className={"cursor-pointer"}>
               {loading ? (
                 <>
                   <Loader2 className="mr-2 w-4 h-4 animate-spin" />

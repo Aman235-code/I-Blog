@@ -112,12 +112,15 @@ const Navbar = () => {
 
             {/* User */}
             {user ? (
-              <div className="hidden md:flex items-center gap-3">
+              <div className="hidden md:flex  items-center gap-3">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="outline" size="icon">
                       <Avatar className="w-8 h-8">
-                        <AvatarImage src={user.photoUrl || userLogo} />
+                        <AvatarImage
+                          className={"cursor-pointer"}
+                          src={user.photoUrl || userLogo}
+                        />
                         <AvatarFallback>U</AvatarFallback>
                       </Avatar>
                     </Button>

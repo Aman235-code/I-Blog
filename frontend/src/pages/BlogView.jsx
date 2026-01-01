@@ -150,7 +150,7 @@ const BlogView = () => {
             {selectedBlog.subtitle}
           </p>
         </div>
-        <p dangerouslySetInnerHTML={{ __html: selectedBlog.description }} />
+        <p className={"text-justify"} dangerouslySetInnerHTML={{ __html: selectedBlog.description }} />
         <div className="mt-10">
           <div className="flex flex-wrap gap-2 mb-8">
             <Badge variant="secondary" className={"dark:bg-gray-800"}>
@@ -172,7 +172,7 @@ const BlogView = () => {
               <Button
                 onClick={likeDislikeHandler}
                 variant="ghost"
-                className={"flex items-center gap-1"}
+                className={"flex cursor-pointer items-center gap-1"}
               >
                 {liked ? (
                   <FaHeart size={24} className="cursor-pointer text-red-600" />

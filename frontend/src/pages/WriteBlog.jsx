@@ -30,17 +30,12 @@ const WriteBlog = () => {
   const { user } = useSelector((store) => store.auth);
 
   const createBlog = async () => {
-    if (!user) {
-      return toast.error("Please Login to continue creating your blogs");
-    }
-
-    if (!title || !category) {
+    if (!user) return toast.error("Please login to create a blog");
+    if (!title || !category)
       return toast.error("Please fill all required fields");
-    }
 
     try {
       dispatch(setLoading(true));
-
       const res = await axios.post(
         "http://localhost:8000/api/v1/blog/create",
         { title, category },
@@ -64,30 +59,32 @@ const WriteBlog = () => {
     }
   };
 
-   if (!user) {
-      return (
-        <div className="flex flex-col items-center justify-center min-h-screen text-center px-4">
-          <h1 className="text-2xl md:text-4xl font-bold mb-4">
-            You are not logged in
-          </h1>
-          <p className="text-gray-600 dark:text-gray-300 mb-6">
-            Please login to access this page and manage your blogs and profile.
-          </p>
-          <Button onClick={() => navigate("/login")}>Go to Login</Button>
-        </div>
-      );
-    }
+  if (!user) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen px-4 text-center">
+        <h1 className="text-2xl md:text-4xl font-bold mb-4">
+          You are not logged in
+        </h1>
+        <p className="text-gray-600 dark:text-gray-300 mb-6">
+          Please login to create and manage your blogs.
+        </p>
+        <Button onClick={() => navigate("/login")} className="px-6 py-2">
+          Go to Login
+        </Button>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen pt-20 px-4 md:ml-80 md:pr-20 bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen pt-10 px-4 md:ml-10 md:pr-20 bg-gray-50 dark:bg-gray-900">
       <Card className="max-w-3xl mx-auto p-6 md:p-10 rounded-2xl shadow-lg dark:bg-gray-800">
         {/* Header */}
         <div className="flex items-center gap-3 mb-2">
-          <PenLine className="text-blue-600" />
+          <PenLine className="text-blue-600 w-6 h-6" />
           <h1 className="text-2xl md:text-3xl font-bold">Start a New Blog</h1>
         </div>
 
-        <p className="text-sm md:text-base text-gray-600 dark:text-gray-300 mb-8">
+        <p className="text-gray-600 dark:text-gray-300 text-sm md:text-base mb-8">
           Give your blog a clear title and choose a category. Once created,
           you’ll be taken to the editor where you can write, format, and publish
           your story for the world to read.
@@ -133,10 +130,14 @@ const WriteBlog = () => {
 
           {/* Action */}
           <div className="pt-2">
-            <Button disabled={loading} onClick={createBlog} className="px-6">
+            <Button
+              disabled={loading}
+              onClick={createBlog}
+              className="px-6 py-2 flex items-center justify-center cursor-pointer"
+            >
               {loading ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <Loader2 className="mr-2 w-4 h-4 animate-spin" />
                   Creating...
                 </>
               ) : (

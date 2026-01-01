@@ -41,20 +41,16 @@ const YourBlog = () => {
       }
     } catch (error) {
       toast.error(error.message);
-      console.log(error.message);
     }
   };
 
   useEffect(() => {
-    if (user) {
-      getBlogs();
-    }
+    if (user) getBlogs();
   }, []);
 
-  const formatDate = (index) => {
-    const date = new Date(blog[index].createdAt);
-    const fDate = date.toLocaleDateString("en-GB");
-    return fDate;
+  const formatDate = (createdAt) => {
+    const date = new Date(createdAt);
+    return date.toLocaleDateString("en-GB");
   };
 
   const deleteBlog = async (id) => {
@@ -71,7 +67,6 @@ const YourBlog = () => {
       }
     } catch (error) {
       toast.error(error.message);
-      console.log(error.message);
     }
   };
 
@@ -82,7 +77,7 @@ const YourBlog = () => {
           You are not logged in
         </h1>
         <p className="text-gray-600 dark:text-gray-300 mb-6">
-          Please login to access this page and manage your blogs and profile.
+          Please login to access your blogs and dashboard features.
         </p>
         <Button onClick={() => navigate("/login")}>Go to Login</Button>
       </div>
@@ -90,66 +85,85 @@ const YourBlog = () => {
   }
 
   return (
-    <div className="pb-10 pt-20 md:ml-80 h-screen">
+    <div className="pb-10 pt-10 md:ml-10 min-h-screen px-2 md:px-0">
       <div className="max-w-6xl mx-auto mt-8">
-        <Card className={"w-full p-5 space-y-2 dark:bg-gray-800"}>
-          <Table>
-            <TableCaption>A list of your recent blogs.</TableCaption>
-            <TableHeader className={"overflow-x-auto"}>
-              <TableRow>
-                <TableHead>Title</TableHead>
-                <TableHead>Category</TableHead>
-                <TableHead>Date</TableHead>
-                <TableHead className="text-center">Action</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody className={"overflow-x-auto"}>
-              {blog.map((item, index) => (
-                <TableRow key={index}>
-                  <TableCell className="flex gap-4 items-center">
-                    <img
-                      src={item.thumbnail}
-                      className="w-20 rounded-md hidden md:block"
-                    />
-                    <h1
-                      onClick={() => navigate(`/blogs/${item._id}`)}
-                      className="hover:underline cursor-pointer w-20 md:w-full truncate"
-                    >
-                      {item.title}
-                    </h1>
-                  </TableCell>
-                  <TableCell>{item.category}</TableCell>
-                  <TableCell>{formatDate(index)}</TableCell>
-                  <TableCell className="text-center">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger>
-                        {" "}
-                        <BsThreeDotsVertical />
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent>
-                        <DropdownMenuItem
-                          onClick={() =>
-                            navigate(`/dashboard/write-blog/${item._id}`)
-                          }
-                        >
-                          <Edit />
-                          Edit
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onClick={() => deleteBlog(item._id)}
-                          className={"text-red-500"}
-                        >
-                          <Trash2 className={"text-red-500"} />
-                          Delete
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
+        {blog && blog.length > 0 ? (
+          <Card className="w-full p-5 space-y-2 dark:bg-gray-800 overflow-x-auto">
+            <Table className="min-w-[600px]">
+              <TableCaption className="text-left">
+                A list of your recent blogs.
+              </TableCaption>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Title</TableHead>
+                  <TableHead>Category</TableHead>
+                  <TableHead>Date</TableHead>
+                  <TableHead className="text-center">Action</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </Card>
+              </TableHeader>
+              <TableBody>
+                {blog.map((item) => (
+                  <TableRow key={item._id}>
+                    <TableCell className="flex gap-3 items-center">
+                      <img
+                        src={item.thumbnail}
+                        className="w-16 h-16 rounded-md hidden md:block object-cover"
+                      />
+                      <h1
+                        onClick={() => navigate(`/blogs/${item._id}`)}
+                        className="hover:underline cursor-pointer truncate max-w-[150px] md:max-w-full"
+                      >
+                        {item.title}
+                      </h1>
+                    </TableCell>
+                    <TableCell>{item.category}</TableCell>
+                    <TableCell>{formatDate(item.createdAt)}</TableCell>
+                    <TableCell className="text-center">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger>
+                          <BsThreeDotsVertical />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                          <DropdownMenuItem
+                            onClick={() =>
+                              navigate(`/dashboard/write-blog/${item._id}`)
+                            }
+                          >
+                            <Edit className="mr-2" />
+                            Edit
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => deleteBlog(item._id)}
+                            className="text-red-500"
+                          >
+                            <Trash2 className="mr-2 text-red-500" />
+                            Delete
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </Card>
+        ) : (
+          <div className="flex flex-col items-center justify-center py-20 space-y-6">
+            <h2 className="text-2xl md:text-3xl font-bold">
+              No blogs published yet
+            </h2>
+            <p className="text-gray-600 dark:text-gray-300 text-center max-w-md">
+              Looks like you haven’t created any blogs yet. Start sharing your ideas
+              and reach your audience.
+            </p>
+            <Button
+              onClick={() => navigate("/dashboard/write-blog")}
+              className="px-6 py-3 cursor-pointer"
+            >
+              Create Your First Blog
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );

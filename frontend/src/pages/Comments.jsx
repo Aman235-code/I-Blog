@@ -6,7 +6,6 @@ import {
   TableBody,
   TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -22,6 +21,7 @@ const Comments = () => {
   const [allComments, setAllComments] = useState([]);
   const { user } = useSelector((store) => store.auth);
   const navigate = useNavigate();
+
   const getTotalComments = async () => {
     try {
       const res = await axios.get(
@@ -38,9 +38,7 @@ const Comments = () => {
   };
 
   useEffect(() => {
-    if (user) {
-      getTotalComments();
-    }
+    if (user) getTotalComments();
   }, []);
 
   if (!user) {
@@ -58,40 +56,57 @@ const Comments = () => {
   }
 
   return (
-    <div className="pb-10 pt-20 md:ml-80 h-screen">
+    <div className="pb-10 pt-20 md:ml-20 min-h-screen px-4 md:px-0">
       <div className="max-w-6xl mx-auto mt-8">
-        <Card className={"w-full p-5 space-y-2 dark:bg-gray-800"}>
-          <Table>
-            <TableCaption>A list of your Comments.</TableCaption>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Blog Title</TableHead>
-                <TableHead>Comment</TableHead>
-                <TableHead>Author</TableHead>
-                <TableHead className="text-center">Action</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {allComments.map((comment, index) => (
-                <TableRow key={index}>
-                  <TableCell className="font-medium">
-                    <h1 className="w-15 truncate md:w-full">
-                      {comment.postId.title}
-                    </h1>
-                  </TableCell>
-                  <TableCell>{comment.content}</TableCell>
-                  <TableCell>{comment.userId.firstName}</TableCell>
-                  <TableCell className="text-right flex gap-3 items-center justify-center">
-                    <Eye
-                      className="cursor-pointer"
-                      onClick={() => navigate(`/blogs/${comment.postId._id}`)}
-                    />
-                  </TableCell>
+        {allComments && allComments.length > 0 ? (
+          <Card className="w-full p-5 space-y-2 dark:bg-gray-800 overflow-x-auto">
+            <Table className="min-w-[600px]">
+              <TableCaption className="text-left">
+                A list of comments on your blogs.
+              </TableCaption>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Blog Title</TableHead>
+                  <TableHead>Comment</TableHead>
+                  <TableHead>Author</TableHead>
+                  <TableHead className="text-center">Action</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </Card>
+              </TableHeader>
+              <TableBody>
+                {allComments.map((comment) => (
+                  <TableRow key={comment._id}>
+                    <TableCell className="font-medium">
+                      <h1 className="truncate max-w-[120px] md:max-w-full cursor-pointer hover:underline"
+                          onClick={() => navigate(`/blogs/${comment.postId._id}`)}>
+                        {comment.postId.title}
+                      </h1>
+                    </TableCell>
+                    <TableCell className="truncate max-w-[150px] md:max-w-full">
+                      {comment.content}
+                    </TableCell>
+                    <TableCell>{comment.userId.firstName}</TableCell>
+                    <TableCell className="text-center flex justify-center">
+                      <Eye
+                        className="cursor-pointer text-gray-600 dark:text-gray-300 hover:text-blue-500"
+                        onClick={() => navigate(`/blogs/${comment.postId._id}`)}
+                      />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </Card>
+        ) : (
+          <div className="flex flex-col items-center justify-center py-20 space-y-6">
+            <h2 className="text-2xl md:text-3xl font-bold text-center">
+              No comments yet
+            </h2>
+            <p className="text-gray-600 dark:text-gray-300 text-center max-w-md">
+              Looks like no one has commented on your blogs yet. Share your thoughts and engage your audience!
+            </p>
+           
+          </div>
+        )}
       </div>
     </div>
   );
