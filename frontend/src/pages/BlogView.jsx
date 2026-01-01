@@ -60,7 +60,9 @@ const BlogView = () => {
     try {
       const action = liked ? "dislike" : "like";
       const res = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/v1/blog/${selectedBlog._id}/${action}`,
+        `${import.meta.env.VITE_API_URL}/api/v1/blog/${
+          selectedBlog._id
+        }/${action}`,
         { withCredentials: true }
       );
 
@@ -191,7 +193,12 @@ const BlogView = () => {
 
               <Button variant="ghost">
                 <MessageSquare className="h-4 w-4" />
-                <span>{selectedBlog?.comments?.length > 0? selectedBlog?.comments?.length : 0} comments</span>
+                <span>
+                  {selectedBlog?.comments?.length > 0
+                    ? selectedBlog?.comments?.length
+                    : 0}{" "}
+                  comments
+                </span>
               </Button>
             </div>
 

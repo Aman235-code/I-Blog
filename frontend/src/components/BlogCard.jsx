@@ -2,15 +2,17 @@ import React from "react";
 import { Button } from "./ui/button";
 import { useNavigate } from "react-router-dom";
 import { Calendar, Tag, User } from "lucide-react";
+import { useSelector } from "react-redux";
+import { toast } from "sonner";
 
 const BlogCard = ({ blog }) => {
   const navigate = useNavigate();
   const date = new Date(blog.createdAt);
   const formattedDate = date.toLocaleDateString("en-GB");
+  const { user } = useSelector((store) => store.auth);
 
   return (
     <div className="group bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300">
-      
       {/* Image */}
       <div className="overflow-hidden">
         <img
@@ -22,7 +24,6 @@ const BlogCard = ({ blog }) => {
 
       {/* Content */}
       <div className="p-5 flex flex-col gap-3">
-        
         {/* Meta */}
         <div className="flex flex-wrap items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
           <span className="flex items-center gap-1">
@@ -55,7 +56,13 @@ const BlogCard = ({ blog }) => {
         <Button
           variant="outline"
           className="mt-2 w-fit cursor-pointer"
-          onClick={() => navigate(`/blogs/${blog._id}`)}
+          onClick={() => {
+            if (user) {
+              navigate(`/blogs/${blog._id}`);
+            } else {
+              toast.error("Please Login to view this blog");
+            }
+          }}
         >
           Read More
         </Button>
