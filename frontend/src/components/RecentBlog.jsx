@@ -43,24 +43,32 @@ const RecentBlog = () => {
       </div>
 
       {/* Layout */}
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-10 px-4">
-        
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-10 px-4 md:px-0">
         {/* Blog list */}
         <div className="lg:col-span-2 space-y-6">
-          {blog?.slice(0, 4)?.map((item, index) => (
-            <BlogCardList key={index} blog={item} />
-          ))}
+          {blog && blog.length > 0 ? (
+            blog
+              .slice(0, 4)
+              .map((item, index) => <BlogCardList key={index} blog={item} />)
+          ) : (
+            <div className="bg-white dark:bg-gray-800 border border-dashed border-gray-300 dark:border-gray-600 rounded-xl p-6 md:p-10 text-center">
+              <h2 className="text-xl md:text-2xl font-semibold mb-2">
+                No blogs published yet
+              </h2>
+              <p className="text-gray-600 dark:text-gray-300 text-sm md:text-base">
+                Looks quiet here. Be the first one to publish a blog and share
+                your thoughts.
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Sidebar */}
-        <aside className="hidden lg:block mt-6">
+        <aside className="hidden lg:block">
           <div className="bg-white dark:bg-gray-700 rounded-xl p-6 space-y-8 shadow-sm">
-            
             {/* Categories */}
             <div>
-              <h2 className="text-xl font-semibold mb-4">
-                Popular Categories
-              </h2>
+              <h2 className="text-xl font-semibold mb-4">Popular Categories</h2>
               <div className="flex flex-wrap gap-2">
                 {[
                   "Blogging",
@@ -93,7 +101,7 @@ const RecentBlog = () => {
                 <Input
                   type="email"
                   placeholder="Enter your email"
-                  className="bg-gray-100 dark:bg-gray-800"
+                  className="bg-gray-100 cursor-pointer dark:bg-gray-800"
                 />
                 <Button className="w-full">Subscribe</Button>
               </div>
@@ -101,9 +109,7 @@ const RecentBlog = () => {
 
             {/* Suggested */}
             <div>
-              <h2 className="text-xl font-semibold mb-3">
-                Suggested Blogs
-              </h2>
+              <h2 className="text-xl font-semibold mb-3">Suggested Blogs</h2>
               <ul className="space-y-3 text-sm">
                 {[
                   "10 Tips to Master React",
@@ -119,7 +125,6 @@ const RecentBlog = () => {
                 ))}
               </ul>
             </div>
-
           </div>
         </aside>
       </div>

@@ -11,7 +11,7 @@ const About = () => {
           <h1 className="text-4xl sm:text-5xl font-extrabold mb-4">
             About Our Blog
           </h1>
-          <p className="text-base sm:text-lg text-gray-600 dark:text-gray-300">
+          <p className="text-center text-base sm:text-lg text-gray-600 dark:text-gray-300">
             A place to share thoughts, inspire others, and grow together.
           </p>
         </div>
@@ -29,7 +29,7 @@ const About = () => {
           </div>
 
           {/* Text */}
-          <div className="text-base sm:text-lg text-gray-700 dark:text-gray-200 space-y-5">
+          <div className="text-justify text-base sm:text-lg text-gray-700 dark:text-gray-200 space-y-5">
             <p>
               Welcome to our IBlog App. We created this platform for readers,
               writers, and thinkers to connect through stories, tutorials, and

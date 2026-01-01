@@ -2,7 +2,7 @@ import { Avatar, AvatarImage } from "../components/ui/avatar";
 import { Card } from "../components/ui/card";
 import React, { useState } from "react";
 import userLogo from "../assets/userLogo.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaFacebook, FaGithub, FaInstagram, FaLinkedin } from "react-icons/fa";
 import { Label } from "../components/ui/label";
 import { Button } from "../components/ui/button";
@@ -39,6 +39,7 @@ const Profile = () => {
     file: user?.photoUrl,
   });
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
   const changeEvent = (e) => {
@@ -96,6 +97,20 @@ const Profile = () => {
       dispatch(setLoading(false));
     }
   };
+
+  if (!user) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen text-center px-4">
+        <h1 className="text-2xl md:text-4xl font-bold mb-4">
+          You are not logged in
+        </h1>
+        <p className="text-gray-600 dark:text-gray-300 mb-6">
+          Please login to access this page and manage your blogs and profile.
+        </p>
+        <Button onClick={() => navigate("/login")}>Go to Login</Button>
+      </div>
+    );
+  }
 
   return (
     <div className="pt-20 md:ml-80 md:h-screen">

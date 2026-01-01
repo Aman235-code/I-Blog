@@ -26,7 +26,7 @@ router.get("/:blogId/dislike", isAuthenticated, dislikeBlog);
 
 router.get("/my-blogs/likes", isAuthenticated, getMyTotalBlogLikes);
 
-router.get("/get-published-blogs", isAuthenticated, getPublishedBlog);
+router.get("/get-published-blogs", getPublishedBlog);
 
 router.patch("/:blogId", togglePublishBlog);
 

@@ -32,7 +32,7 @@ const router = createBrowserRouter([
     element: (
       <>
         <Navbar />
-        <Blogs />,
+        <Blogs />
         <Footer />
       </>
     ),
@@ -42,7 +42,7 @@ const router = createBrowserRouter([
     element: (
       <>
         <Navbar />
-        <About />,
+        <About />
         <Footer />
       </>
     ),
@@ -80,7 +80,7 @@ const router = createBrowserRouter([
     element: (
       <>
         <Navbar />
-        <BlogView />,
+        <BlogView />
       </>
     ),
   },
@@ -89,29 +89,29 @@ const router = createBrowserRouter([
     element: (
       <>
         <Navbar />
-        <Dashboard />,
+        <Dashboard />
       </>
     ),
     children: [
       {
         path: "profile",
-        element: <Profile />,
+        element: <Profile />
       },
       {
         path: "your-blog",
-        element: <YourBlog />,
+        element: <YourBlog />
       },
       {
         path: "comments",
-        element: <Comments />,
+        element: <Comments />
       },
       {
         path: "write-blog",
-        element: <WriteBlog />,
+        element: <WriteBlog />
       },
       {
         path: "write-blog/:blogId",
-        element: <UpdateBlog />,
+        element: <UpdateBlog />
       },
     ],
   },
