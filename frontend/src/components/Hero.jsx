@@ -13,7 +13,7 @@ const Hero = () => {
       <div className="max-w-7xl mx-auto min-h-[calc(100vh-4rem)] flex flex-col-reverse md:flex-row items-center justify-center gap-10">
         {/* Text Section */}
         <div className="w-full md:w-1/2 text-center md:text-left">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight mb-6 text-justify">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight mb-6">
             Explore the Latest Tech <br className="hidden md:block" />& Web
             Trends
           </h1>

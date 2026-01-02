@@ -1,9 +1,12 @@
 import React from "react";
 import { Button } from "./ui/button";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { toast } from "sonner";
 
 const BlogCardList = ({ blog }) => {
   const navigate = useNavigate();
+  const { user } = useSelector((store) => store.auth);
 
   return (
     <div className="group bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-2xl shadow-sm hover:shadow-lg transition-all overflow-hidden">
@@ -35,8 +38,15 @@ const BlogCardList = ({ blog }) => {
             <Button
               variant="outline"
               className="rounded-full px-5 py-2 text-sm cursor-pointer"
-              onClick={() => navigate(`/blogs/${blog._id}`)}
+              onClick={() => {
+                if (user) {
+                  navigate(`/blogs/${blog._id}`);
+                } else {
+                  toast.error("Please Login to view this blog");
+                }
+              }}
             >
+              {" "}
               Read More
             </Button>
           </div>
