@@ -89,7 +89,7 @@ const Footer = () => {
       {/* Bottom */}
       <div className="border-t border-gray-800 py-6 text-center text-sm">
         © {new Date().getFullYear()}{" "}
-        <span className="text-red-500 font-medium">I-Blog</span>. All rights reserved.
+        <span className="text-red-500 font-medium">I-Blog</span>. Created by Aman. All rights reserved.
       </div>
     </footer>
   );

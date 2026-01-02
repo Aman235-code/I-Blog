@@ -1,4 +1,7 @@
-import { ChartColumnBig, SquareUser } from "lucide-react";
+import {
+  ChartColumnBig,
+  SquareUser,
+} from "lucide-react";
 import React, { useState } from "react";
 import { FaRegEdit } from "react-icons/fa";
 import { LiaCommentSolid } from "react-icons/lia";
@@ -29,34 +32,35 @@ const Sidebar = () => {
 
   return (
     <>
-      {/* Mobile menu button */}
+      {/* Mobile toggle */}
       <button
-        className="md:hidden fixed top-4 left-4 z-50 p-2 bg-gray-800 text-white rounded-md shadow"
         onClick={() => setOpen(true)}
+        className="md:hidden fixed top-4 left-4 z-[60] rounded-lg bg-gray-900 p-2 text-white shadow-lg"
       >
         <HiMenuAlt1 size={24} />
       </button>
 
-      {/* Backdrop for mobile */}
+      {/* Backdrop */}
       {open && (
         <div
-          className="fixed inset-0  bg-opacity-50 z-40 md:hidden"
           onClick={() => setOpen(false)}
-        ></div>
+          className="fixed inset-0 z-50 bg-black/50 md:hidden"
+        />
       )}
 
       {/* Sidebar */}
-      <div
+      <aside
         className={`
-          fixed top-0 left-0 md:h-full bg-white dark:bg-gray-800 border-r-2 border-gray-300 dark:border-gray-600
-          w-64 md:w-72
-          transform ${
-            open ? "translate-x-0" : "-translate-x-full"
-          } transition-transform duration-300 ease-in-out
-          md:translate-x-0 md:block md:relative md:top-0 md:left-0 md:h-screen
+          fixed top-0 left-0 z-[55]
+          h-screen w-64
+          bg-white dark:bg-gray-900
+          border-r border-gray-200 dark:border-gray-700
+          transform transition-transform duration-300 ease-out
+          ${open ? "translate-x-0" : "-translate-x-full"}
+          md:translate-x-0 md:static md:z-auto
         `}
       >
-        {/* Close button for mobile */}
+        {/* Mobile close */}
         <div className="md:hidden flex justify-end p-4">
           <HiX
             size={24}
@@ -65,26 +69,37 @@ const Sidebar = () => {
           />
         </div>
 
-        <div className="text-center pt-10 px-3 space-y-2">
-          {menuItems.map((item, idx) => (
-            <NavLink
-              key={idx}
-              to={item.path}
-              className={({ isActive }) =>
-                `text-xl md:text-2xl ${
-                  isActive
-                    ? "bg-gray-800 dark:bg-gray-900 text-gray-200"
-                    : "bg-transparent text-gray-800 dark:text-gray-200"
-                } flex items-center gap-2 font-bold cursor-pointer p-3 rounded-2xl w-full hover:bg-gray-100 dark:hover:bg-gray-700 transition`
-              }
-              onClick={() => setOpen(false)} // close drawer on mobile
-            >
-              {item.icon}
-              <span>{item.label}</span>
-            </NavLink>
-          ))}
+        {/* Content */}
+        <div className="h-full overflow-y-auto px-4 pb-6">
+          <h2 className="mb-6 mt-2 text-lg font-semibold text-gray-800 dark:text-gray-100">
+            Dashboard
+          </h2>
+
+          <nav className="space-y-2">
+            {menuItems.map((item, idx) => (
+              <NavLink
+                key={idx}
+                to={item.path}
+                onClick={() => setOpen(false)}
+                className={({ isActive }) =>
+                  `
+                  flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium
+                  transition
+                  ${
+                    isActive
+                      ? "bg-gray-900 text-white dark:bg-gray-800"
+                      : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+                  }
+                `
+                }
+              >
+                <span className="text-lg">{item.icon}</span>
+                {item.label}
+              </NavLink>
+            ))}
+          </nav>
         </div>
-      </div>
+      </aside>
     </>
   );
 };
